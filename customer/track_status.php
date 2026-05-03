@@ -1,8 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['role']) |
-
-| $_SESSION['role']!== 'CUSTOMER') {
+if (!isset($_SESSION['role']) || $_SESSION['role']!== 'CUSTOMER') {
     header("Location:../login.php");
     exit();
 }
@@ -49,9 +47,7 @@ include '../includes/header.php';
                                             if ($row['status'] === 'REQUESTED') $bg = 'warning text-dark';
                                             if ($row['status'] === 'ASSIGNED') $bg = 'primary';
                                             if ($row['status'] === 'COMPLETED') $bg = 'success';
-                                            if ($row['status'] === 'CANCELLED' |
-
-| $row['status'] === 'NO_SHOW') $bg = 'danger';
+                                            if ($row['status'] === 'CANCELLED' || $row['status'] === 'NO_SHOW') $bg = 'danger';
                                        ?>
                                         <span class="badge bg-<?php echo $bg;?> fs-6 px-3 py-2"><?php echo htmlspecialchars($row['status']);?></span>
                                     </div>

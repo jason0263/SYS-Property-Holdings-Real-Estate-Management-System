@@ -1,27 +1,31 @@
 <?php
-session_start();
-if (!isset($_SESSION['role']) |
 
-| $_SESSION['role']!== 'CUSTOMER') {
-    header("Location:../login.php");
+session_start();
+
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'CUSTOMER') {
+    header("Location: ../login.php");
     exit();
 }
+
 include '../includes/db_connect.php';
 include '../includes/header.php';
 
 $account_id = $_SESSION['account_id'];
 
-$stmt1 = $conn->prepare("SELECT COUNT(*) as appt_count FROM appointments WHERE customer_id =?");
+// Appointments
+$stmt1 = $conn->prepare("SELECT COUNT(*) as appt_count FROM appointments WHERE customer_id = ?");
 $stmt1->bind_param("i", $account_id);
 $stmt1->execute();
 $appt_count = $stmt1->get_result()->fetch_assoc()['appt_count'];
 
-$stmt2 = $conn->prepare("SELECT COUNT(*) as house_count FROM affordable_housing_applications WHERE customer_id =?");
+// Housing
+$stmt2 = $conn->prepare("SELECT COUNT(*) as house_count FROM affordable_housing_applications WHERE customer_id = ?");
 $stmt2->bind_param("i", $account_id);
 $stmt2->execute();
 $house_count = $stmt2->get_result()->fetch_assoc()['house_count'];
 
-$stmt3 = $conn->prepare("SELECT full_name FROM customers WHERE customer_id =?");
+// Name
+$stmt3 = $conn->prepare("SELECT full_name FROM customers WHERE customer_id = ?");
 $stmt3->bind_param("i", $account_id);
 $stmt3->execute();
 $customer_name = $stmt3->get_result()->fetch_assoc()['full_name'];
